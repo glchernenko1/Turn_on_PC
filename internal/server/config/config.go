@@ -1,26 +1,25 @@
 package config
 
 import (
+	"Turn_on_PC/pkg/logging"
 	"github.com/ilyakaznacheev/cleanenv"
 	"sync"
-	"Turn_on_PC/pkg/logging"
 )
 
 type Config struct {
 	IsDebug *bool `yaml:"is_debug" env-default:"true"`
 	Server  struct {
-		Type   string `yaml:"type" env-default:"port"`
-		BindIP string `yaml:"bind_ip" env-default:"127.0.0.1"`
-		Port   string `yaml:"port" env-default:"1234"`
+		BindIP string `yaml:"bind_ip" env:"BindIP" env-default:"127.0.0.1"`
+		Port   string `yaml:"port" env:"PortService" env-default:"1234"`
 	} `yaml:"Server"`
 	Postgres struct {
-		Database string `yaml:"database"`
-		Host     string `yaml:"host"`
-		Port     string `yaml:"port"`
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
+		Database string `yaml:"database" env:"Database"`
+		Host     string `yaml:"host" env:"Host"`
+		Port     string `yaml:"port" env:"Port"`
+		Username string `yaml:"username" env:"Username"`
+		Password string `yaml:"password" env:"Password"`
 	} `yaml:"Postgres"`
-	Token_password string `env-default:"token: "thisIsTheJwtSecretPassword"`
+	TokenPassword string `env:"token_password"`
 }
 
 var instance *Config
