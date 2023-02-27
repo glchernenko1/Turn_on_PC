@@ -1,14 +1,14 @@
 package handlers
 
 import (
-	"github.com/gorilla/websocket"
+	"Turn_on_PC/internal/DTO"
+	"Turn_on_PC/internal/server/middleware"
+	"Turn_on_PC/internal/server/servis"
 	"Turn_on_PC/pkg/logging"
+	"github.com/gorilla/websocket"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 	"strings"
-	"Turn_on_PC/internal/DTO"
-	"Turn_on_PC/internal/server/servis"
-	"Turn_on_PC/internal/server/middleware"
 )
 
 const (
@@ -35,7 +35,7 @@ func NewHandlerWs(logger *logging.Logger) Handler {
 }
 
 func (h *handlerWs) Register(router *httprouter.Router) {
-	router.HandlerFunc(http.MethodGet, WsUrl, middleware.MiddlewareAuth(h.WS))
+	router.HandlerFunc(http.MethodGet, WsUrl, middleware.MiddlewareAuth(h.WS, "WebUser", "ServerUser", "ClientPC"))
 }
 
 func (h *handlerWs) WS(w http.ResponseWriter, r *http.Request, token *DTO.JWTUser) error {

@@ -8,7 +8,7 @@ type BaseUser struct {
 type UserSingIn struct {
 	Login    string `json:"login" validate:"required,min=4,max=15"`
 	Password string `json:"password" validate:"min=8,max=50"`
-	Scope    string `json:"scope" validate:"required,in=WebUser,ServerUser,ClientPC"`
+	Scope    string `json:"scope" validate:"required"`
 }
 
 type CreateUser struct {
