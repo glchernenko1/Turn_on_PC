@@ -2,11 +2,12 @@ package servis
 
 import (
 	"Turn_on_PC/internal/DTO"
-	"Turn_on_PC/pkg/hash"
-	"os"
-	"github.com/dgrijalva/jwt-go"
-	"Turn_on_PC/internal/server/apperror"
 	"Turn_on_PC/internal/server/DB"
+	"Turn_on_PC/internal/server/apperror"
+	"Turn_on_PC/internal/server/config"
+	"Turn_on_PC/pkg/hash"
+	"github.com/dgrijalva/jwt-go"
+	"log"
 )
 
 func Register(db DB.DB, user *DTO.CreateUser) (uint, error) {
@@ -16,15 +17,16 @@ func Register(db DB.DB, user *DTO.CreateUser) (uint, error) {
 }
 
 func SingIn(db DB.DB, login string, password string, scope string) (string, error) {
-
+	log.Println("start SingIn")
 	user, err := db.FiendUserByLogin(login)
 	if err != nil {
 		return "", apperror.Unauthorized
 	}
+	log.Println("found user")
 	if hash.CheckPasswordHash(password, user.PasswordHash) {
 		tk := &DTO.JWTUser{UserId: user.ID, Scope: scope}
 		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-		tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
+		tokenString, _ := token.SignedString([]byte(config.GetConfig().TokenPassword))
 		return tokenString, err
 	}
 	return "", apperror.Unauthorized
