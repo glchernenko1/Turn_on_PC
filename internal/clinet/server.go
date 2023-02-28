@@ -1,16 +1,16 @@
 package clinet
 
 import (
-	"os"
-	"github.com/gorilla/websocket"
-	"fmt"
 	"encoding/json"
-	"net/url"
-	"net/http"
+	"fmt"
+	"github.com/gorilla/websocket"
 	"io"
 	"log"
-	"strings"
 	"net"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
 )
 
 func StartWSServer(host string, JWT string, name string, path string) {
@@ -102,6 +102,9 @@ func ReadJsonUser(path string) (map[string]string, error) {
 	err = json.Unmarshal([]byte(file), &user)
 	if err != nil {
 		return user, err
+	}
+	if len(user) == 0 {
+		panic("User is empty or not correctly JSON")
 	}
 	return user, err
 }

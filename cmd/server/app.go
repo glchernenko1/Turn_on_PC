@@ -4,13 +4,13 @@ import (
 	"Turn_on_PC/pkg/logging"
 	"github.com/julienschmidt/httprouter"
 
-	"time"
-	"net/http"
-	"net"
-	"fmt"
+	"Turn_on_PC/internal/server/DB/postgres"
 	"Turn_on_PC/internal/server/config"
 	"Turn_on_PC/internal/server/handlers"
-	"Turn_on_PC/internal/server/DB/postgres"
+	"fmt"
+	"net"
+	"net/http"
+	"time"
 )
 
 func main() {
@@ -20,7 +20,6 @@ func main() {
 	cfg := config.GetConfig()
 	db := postgres.NewDB(cfg, logger)
 	router := httprouter.New()
-	//postgres.FiendUserByLogin(db, "asdsadas")
 	handler := handlers.NewHandler(logger, db)
 	handler.Register(router)
 	handlerWS := handlers.NewHandlerWs(logger)
