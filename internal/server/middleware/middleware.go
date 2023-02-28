@@ -1,12 +1,12 @@
 package middleware
 
 import (
-	"net/http"
-	"strings"
 	"Turn_on_PC/internal/DTO"
-	"os"
-	"github.com/dgrijalva/jwt-go"
 	"Turn_on_PC/internal/server/apperror"
+	"github.com/dgrijalva/jwt-go"
+	"net/http"
+	"os"
+	"strings"
 )
 
 type appHandler func(w http.ResponseWriter, r *http.Request) error
@@ -73,9 +73,10 @@ func MiddlewareAuth(h appHandlerWithToken, scopes ...string) http.HandlerFunc {
 			return apperror.Unauthorized
 		}
 		for _, scope := range scopes {
-			if tk.Scope != scope {
-				return apperror.Unauthorized
+			if tk.Scope == scope {
+				break
 			}
+			return apperror.Unauthorized
 		}
 		return h(w, r, tk)
 	})
