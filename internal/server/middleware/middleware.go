@@ -74,10 +74,9 @@ func MiddlewareAuth(h appHandlerWithToken, scopes ...string) http.HandlerFunc {
 		}
 		for _, scope := range scopes {
 			if tk.Scope == scope {
-				break
+				return h(w, r, tk)
 			}
-			return apperror.Unauthorized
 		}
-		return h(w, r, tk)
+		return apperror.Unauthorized
 	})
 }
