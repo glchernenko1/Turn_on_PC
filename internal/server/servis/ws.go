@@ -1,10 +1,10 @@
 package servis
 
 import (
-	"github.com/gorilla/websocket"
 	"Turn_on_PC/internal/DTO"
-	"fmt"
 	"Turn_on_PC/internal/server/apperror"
+	"fmt"
+	"github.com/gorilla/websocket"
 )
 
 type Client struct {
@@ -65,8 +65,7 @@ func (DB *DBClient) AddClient(client Client) error {
 
 			DB.ServerUser[client.Token.UserId][client.Name] = client
 			go DB.MessageToWebUser(client, fmt.Sprintf("Server: \"%s\" connected", client.Name))
-			go DB.GetListPCUserConnection(client)
-
+			go DB.MessageToServerUser(client, "get_list_PCUser_by_Server")
 		}
 	case "ClientPC":
 		{
