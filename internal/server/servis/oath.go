@@ -25,11 +25,8 @@ func SingIn(db DB.DB, login string, password string, scope string) (string, erro
 	log.Println("found user")
 	if hash.CheckPasswordHash(password, user.PasswordHash) {
 		tk := &DTO.JWTUser{UserId: user.ID, Scope: scope}
-		log.Println("start hash")
 		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
-		log.Println("end hash____ read token pass")
 		str := config.GetConfig().TokenPassword
-		log.Println("start add pass")
 		tokenString, _ := token.SignedString([]byte(str))
 		return tokenString, err
 	}

@@ -48,32 +48,26 @@ func (h *handler) SingUP(w http.ResponseWriter, r *http.Request) error {
 	}
 	_, err = servis.Register(h.db, user) //todo понять нужно ли возвращать юзера или нет
 	if err != nil {
-		return err
+		return apperror.BadRequest
 	}
 	w.WriteHeader(201)
 	return nil
 }
 
 func (h *handler) SingIn(w http.ResponseWriter, r *http.Request) error {
-	h.logger.Info("start SingIn ")
 	user := new(DTO.UserSingIn)
 	decoder := json.NewDecoder(r.Body)
-	h.logger.Info("Decode json")
 	defer r.Body.Close()
 	decoder.Decode(&user)
-	h.logger.Info("Decode User")
 	err := h.validate.Struct(user)
-	h.logger.Info("Validate")
 	if err != nil {
 		return apperror.BadRequest
 	}
 	token, err := servis.SingIn(h.db, user.Login, user.Password, user.Scope)
-	h.logger.Info("create token")
 	if err != nil {
 		return err
 	}
 	w.WriteHeader(200)
 	w.Write([]byte(token))
-	h.logger.Info("push token")
 	return nil
 }
