@@ -45,8 +45,8 @@ func start(router *httprouter.Router, cfg *config.Config) {
 
 	server := &http.Server{
 		Handler:      router,
-		WriteTimeout: 10 * time.Second,
-		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 35 * time.Second,
+		ReadTimeout:  35 * time.Second,
 	}
 
 	logger.Fatalln(server.Serve(listener))

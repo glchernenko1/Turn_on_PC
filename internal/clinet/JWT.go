@@ -7,17 +7,15 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 )
 
 func GetJWT(host string, login string, password string, scope string) (string, error) {
-	url := url.URL{Scheme: "HTTP", Host: host, Path: "oauth"}
 	user := DTO.UserSingIn{Login: login, Password: password, Scope: scope}
 	userJson, err := json.Marshal(&user)
 	if err != nil {
 		return "", err
 	}
-	r, err := http.Post(url.String(), "application/json", bytes.NewBuffer(userJson))
+	r, err := http.Post(fmt.Sprintf("%s/oauth", host), "application/json", bytes.NewBuffer(userJson))
 	if err != nil {
 		return "", err
 	}

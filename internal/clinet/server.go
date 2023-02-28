@@ -14,7 +14,17 @@ import (
 )
 
 func StartWSServer(host string, JWT string, name string, path string) {
-	urlWS := url.URL{Scheme: "WS", Host: host, Path: "ws"}
+	u, err := url.Parse(host)
+	if err != nil {
+		panic(err)
+	}
+	var scheme string
+	if u.Scheme == "https" {
+		scheme = "wss"
+	} else {
+		scheme = "ws"
+	}
+	urlWS := url.URL{Scheme: scheme, Host: u.Host, Path: "ws"}
 
 	con, resp, err := websocket.DefaultDialer.Dial(urlWS.String(),
 		http.Header{"Authorization": {JWT}, "name": {name}})

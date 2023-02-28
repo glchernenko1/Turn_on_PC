@@ -9,7 +9,7 @@ func main() {
 
 	args := os.Args
 	if len(args) != 6 {
-		panic("You must pass url without http/https, login, password, name, path_to_json")
+		panic("You must pass url , login, password, name, path_to_json")
 	}
 
 	JWT, err := clinet.GetJWT(args[1], args[2], args[3], "ServerUser")

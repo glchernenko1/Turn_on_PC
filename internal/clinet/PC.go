@@ -1,6 +1,7 @@
 package clinet
 
 import (
+	"fmt"
 	"github.com/gorilla/websocket"
 	"io"
 	"log"
@@ -11,12 +12,22 @@ import (
 )
 
 func StartWSPC(host string, JWT string, name string) {
-	urlWS := url.URL{Scheme: "WS", Host: host, Path: "ws"}
+	u, err := url.Parse(host)
+	if err != nil {
+		panic(err)
+	}
+	var scheme string
+	if u.Scheme == "https" {
+		scheme = "wss"
+	} else {
+		scheme = "ws"
+	}
+	urlWS := url.URL{Scheme: scheme, Host: u.Host, Path: "ws"}
 
 	con, resp, err := websocket.DefaultDialer.Dial(urlWS.String(),
 		http.Header{"Authorization": {JWT}, "name": {name}})
 
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != 101 {
 		message, _ := io.ReadAll(resp.Body)
 		panic(string(message))
 	}
@@ -56,8 +67,9 @@ func tornOnPC() {
 			if err != nil {
 				panic(err)
 			}
-			cmd = exec.Command("psshutdown.exe", "-d", "-t", "0", "-accepteula")
+			cmd = exec.Command("rundll32.exe", "powrprof.dll", "SetSuspendState", "0", "1", "0")
 			err = cmd.Run()
+			fmt.Println(err)
 			if err != nil {
 				panic(err)
 			}
